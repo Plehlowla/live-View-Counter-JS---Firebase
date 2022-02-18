@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Counter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1 id="view_count_header">Realtime View Counter</h1>
+        <div id="view_count_container">
+            <p id="view_count_text"> </p>
+        </div>
+    </div>
+    
+</body>
+
+<!-- <script type="application/javascript">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAbDnngxlOYKrIRy9Fux1xXNq8dV4Hm8Lc",
+      authDomain: "realtime-view-counter-3b248.firebaseapp.com",
+      projectId: "realtime-view-counter-3b248",
+      storageBucket: "realtime-view-counter-3b248.appspot.com",
+      messagingSenderId: "371659724894",
+      appId: "1:371659724894:web:26ffad7b22d1921100fccf"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+  </script> -->
+
+<script type="module application/javascript">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-database.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAbDnngxlOYKrIRy9Fux1xXNq8dV4Hm8Lc",
+      authDomain: "realtime-view-counter-3b248.firebaseapp.com",
+      projectId: "realtime-view-counter-3b248",
+      storageBucket: "realtime-view-counter-3b248.appspot.com",
+      messagingSenderId: "371659724894",
+      appId: "1:371659724894:web:26ffad7b22d1921100fccf"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    function get_viewers_ip(json){
+        viewers_ip = json.ip;
+        // count view with ip
+        count_view(viewers_ip);
+    }
+
+    function count_view(viewers_ip){
+        var views;
+        var ip_to_string = viewers_ip.toString();
+
+        for(var i, i=0; i < ip_to_string.length; i++){
+            ip_to_string = ip_to_string.replace(".","-")
+        }
+
+        firebase.database().ref().child("page_views/" + ip_to_string).set({
+            viewers_ip: viewers_ip,
+        });
+
+        firebase.database().ref().child("page_views").on("value", function(snapshot){
+            views = snapshot.numChildren();
+            document.getElementById('view_count_text').innerHTML = " " + views;
+        })
+    }
+
+
+  </script>
+
+  <script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=get_viewers_ip/" ></script>
+  
+</html>
